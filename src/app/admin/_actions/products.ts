@@ -87,7 +87,48 @@ export async function updateProductAction(
         return result.error.formErrors.fieldErrors;
     }
 
-    const productData = result.data;
+    const newData = result.data;
+    const productData = await findProductAction(productId);
+
+    if (!productData) {
+        return notFound();
+    }
+
+    let filePath = productData.filePath;
+    if (newData.file && newData.file?.size > 0) {
+        await fs.unlink(productData.filePath);
+        filePath = `products/${crypto.randomUUID()}-${newData.file.name}`;
+        // convert file into buffer so that nodejs can write it
+        await fs.writeFile(
+            filePath,
+            Buffer.from(await newData.file.arrayBuffer())
+        );
+    }
+
+    let imagePath = productData.imagePath;
+    if (newData.image && newData.image?.size > 0) {
+        await fs.unlink(`public/${productData.imagePath}`);
+        imagePath = `products/${crypto.randomUUID()}-${newData.image.name}`;
+        await fs.writeFile(
+            `public/${imagePath}`,
+            Buffer.from(await newData.image.arrayBuffer())
+        );
+    }
+
+    await db.product.update({
+        where: {
+            id: productId,
+        },
+        data: {
+            name: newData.name,
+            description: newData.description,
+            priceInPaise: newData.priceInPaise,
+            filePath,
+            imagePath,
+        },
+    });
+
+    redirect("/admin/products");
 }
 
 export async function toggleProductAvailabilityAction(
