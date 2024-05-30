@@ -75,7 +75,20 @@ export async function updateProductAction(
     productId: string,
     _prevState: unknown,
     formData: FormData
-) {}
+) {
+    const result = editProductSchema.safeParse(
+        /**
+         * The name attribute should be same as the object keys in zod object
+         * other wise it will not match and give you ZodError
+         * */
+        Object.fromEntries(formData.entries())
+    );
+    if (!result.success) {
+        return result.error.formErrors.fieldErrors;
+    }
+
+    const productData = result.data;
+}
 
 export async function toggleProductAvailabilityAction(
     productId: string,
