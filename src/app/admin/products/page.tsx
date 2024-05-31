@@ -17,7 +17,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import PageHeader from "../_components/page-header";
+import PageHeader from "@/components/page-header";
 import db from "@/app/db/db";
 import {
     ActiveToggleDropdownItem,

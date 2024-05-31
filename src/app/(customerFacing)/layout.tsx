@@ -1,6 +1,6 @@
 import { AdminNav, AdminNavLink } from "@/components/admin-nav";
 
-export default function AdminLayout({
+export default function CustomerLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
@@ -9,10 +9,8 @@ export default function AdminLayout({
         <>
             <AdminNav>
                 <AdminNavLink href="/">Home</AdminNavLink>
-                <AdminNavLink href="/admin">Dashboard</AdminNavLink>
-                <AdminNavLink href="/admin/products">Products</AdminNavLink>
-                <AdminNavLink href="/admin/users">Customers</AdminNavLink>
-                <AdminNavLink href="/admin/orders">Sales</AdminNavLink>
+                <AdminNavLink href="/products">Products</AdminNavLink>
+                <AdminNavLink href="/orders">My Orders</AdminNavLink>
             </AdminNav>
             <div className="container my-6">{children}</div>
         </>

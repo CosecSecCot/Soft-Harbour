@@ -18,7 +18,7 @@ export function ProductForm({ product }: { product?: Product | null }) {
             : updateProductAction.bind(null, product.id),
         {}
     );
-    const [priceInPaise, setPriceInCents] = useState<number | undefined>(
+    const [priceInPaise, setPriceInPaise] = useState<number | undefined>(
         product?.priceInPaise
     );
 
@@ -38,7 +38,7 @@ export function ProductForm({ product }: { product?: Product | null }) {
                 )}
             </div>
             <div className="space-y-2">
-                <Label htmlFor="priceInPaise">Price In Cents</Label>
+                <Label htmlFor="priceInPaise">Price In Paise</Label>
                 <Input
                     type="number"
                     id="priceInPaise"
@@ -46,7 +46,7 @@ export function ProductForm({ product }: { product?: Product | null }) {
                     required
                     value={priceInPaise}
                     onChange={(e) =>
-                        setPriceInCents(Number(e.target.value) || undefined)
+                        setPriceInPaise(Number(e.target.value) || undefined)
                     }
                 />
                 <div className="text-muted-foreground">

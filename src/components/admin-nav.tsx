@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 
 export function AdminNav({ children }: { children: React.ReactNode }) {
     return (
-        <nav className="bg-primary text-primary-foreground flex justify-between items-center pr-4">
-            <div className="bg-primary text-primary-foreground flex justify-start">
+        <nav className="bg-secondary text-primary flex justify-between items-center pr-4">
+            <div className="bg-secondary text-primary flex justify-start">
                 {children}
             </div>
             <span>
@@ -27,7 +27,7 @@ export function AdminNavLink(
         <Link
             {...props}
             className={cn(
-                "p-4 hover:bg-secondary hover:text-secondary-foreground focus-visible:bg-secondary focus-visible:text-secondary-foreground",
+                "p-4 hover:bg-primary-foreground hover:text-secondary-foreground focus-visible:bg-secondary focus-visible:text-secondary-foreground",
                 pathName === props.href ? "bg-background text-foreground" : ""
             )}
         />

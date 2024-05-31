@@ -1,4 +1,4 @@
-import PageHeader from "@/app/admin/_components/page-header";
+import PageHeader from "@/components/page-header";
 import { ProductForm } from "@/app/admin/_components/product-form";
 import db from "@/app/db/db";
 
