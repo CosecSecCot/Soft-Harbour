@@ -23,7 +23,10 @@ export function ProductDisplayCard({ products }: ProductDisplayCardProps) {
             {products.length > 0 ? (
                 products.map((product) => {
                     return (
-                        <Card className=" overflow-hidden sm:w-[50vh] w-[35vh] cursor-pointer">
+                        <Card
+                            key={product.id}
+                            className=" overflow-hidden sm:w-[50vh] w-[35vh] cursor-pointer"
+                        >
                             <Link
                                 href={`products/${product.id}`}
                                 className="flex flex-col justify-between h-full"
