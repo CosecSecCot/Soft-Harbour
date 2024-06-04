@@ -3,6 +3,7 @@ import PageHeader from "@/components/page-header";
 import { Button } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/formatters";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 export default async function ProductDetailsPage({
@@ -14,6 +15,12 @@ export default async function ProductDetailsPage({
         where: {
             id: id,
         },
+        select: {
+            name: true,
+            description: true,
+            priceInPaise: true,
+            imagePath: true,
+        },
     });
     if (!product) {
         return notFound();
@@ -21,7 +28,7 @@ export default async function ProductDetailsPage({
     return (
         <main>
             <div className="w-full flex md:flex-row flex-col gap-6 justify-center items-center">
-                <div className="relative md:w-[40%] w-[80%] h-auto aspect-square">
+                <div className="relative md:w-[40%] w-full h-auto aspect-square">
                     <Image
                         alt={product.name + " cover_image"}
                         className="rounded-md object-cover"
@@ -29,7 +36,7 @@ export default async function ProductDetailsPage({
                         fill
                     />
                 </div>
-                <div className="flex flex-col justify-center md:w-[40%] w-[80%] gap-8">
+                <div className="flex flex-col justify-center md:w-[40%] w-full gap-8">
                     <div>
                         <PageHeader>{product.name}</PageHeader>
                         <h2 className="text-2xl">
@@ -39,7 +46,9 @@ export default async function ProductDetailsPage({
                     <p className="text-muted-foreground break-words">
                         {product.description}
                     </p>
-                    <Button>Purchase</Button>
+                    <Button asChild>
+                        <Link href={`/products/${id}/purchase`}>Purchase</Link>
+                    </Button>
                 </div>
             </div>
         </main>

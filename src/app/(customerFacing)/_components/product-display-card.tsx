@@ -25,7 +25,7 @@ export function ProductDisplayCard({ products }: ProductDisplayCardProps) {
                     return (
                         <Card
                             key={product.id}
-                            className=" overflow-hidden sm:w-[50vh] w-[35vh] cursor-pointer"
+                            className="bg-primary-foreground overflow-hidden sm:w-[50vh] w-[35vh] cursor-pointer"
                         >
                             <Link
                                 href={`products/${product.id}`}
