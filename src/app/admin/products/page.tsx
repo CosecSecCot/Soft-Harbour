@@ -8,7 +8,12 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
-import { CheckCircle2, MoreVertical, XCircle } from "lucide-react";
+import {
+    CheckCircle2,
+    MoreHorizontal,
+    MoreVertical,
+    XCircle,
+} from "lucide-react";
 import { formatCurrency, formatNumber } from "@/lib/formatters";
 import {
     DropdownMenu,
@@ -92,9 +97,15 @@ async function ProductsTable() {
                         </TableCell>
                         <TableCell>
                             <DropdownMenu>
-                                <DropdownMenuTrigger>
-                                    <MoreVertical />
-                                    <span className="sr-only">Actions</span>
+                                <DropdownMenuTrigger asChild>
+                                    <Button
+                                        aria-haspopup="true"
+                                        size="icon"
+                                        variant="ghost"
+                                    >
+                                        <MoreHorizontal className="h-4 w-4" />
+                                        <span className="sr-only">Actions</span>
+                                    </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent>
                                     <DropdownMenuItem asChild>

@@ -16,10 +16,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { formSchema, onPaymentSubmit } from "../_actions/payment-form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Card, CardDescription } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import Image from "next/image";
 
-export function PaymentForm({ amount }: { amount: number }) {
+export function PaymentForm({
+    amount,
+    productId,
+}: {
+    amount: number;
+    productId: string;
+}) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -32,7 +38,9 @@ export function PaymentForm({ amount }: { amount: number }) {
     return (
         <Form {...form}>
             <form
-                onSubmit={form.handleSubmit(onPaymentSubmit.bind(null, amount))}
+                onSubmit={form.handleSubmit(
+                    onPaymentSubmit.bind(null, productId).bind(null, amount)
+                )}
                 className="space-y-4"
             >
                 <h3 className={"text-2xl font-normal pt-8"}>

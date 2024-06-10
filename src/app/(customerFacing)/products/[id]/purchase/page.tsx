@@ -16,6 +16,7 @@ export default async function ProductPurchasePage({
             id: id,
         },
         select: {
+            id: true,
             name: true,
             description: true,
             priceInPaise: true,
@@ -61,7 +62,10 @@ export default async function ProductPurchasePage({
                         <TotalPrice priceInPaise={product.priceInPaise} />
                     </div>
                     <div className="lg:w-[70vw]">
-                        <PaymentForm amount={product.priceInPaise} />
+                        <PaymentForm
+                            amount={product.priceInPaise}
+                            productId={product.id}
+                        />
                     </div>
                 </div>
             </div>

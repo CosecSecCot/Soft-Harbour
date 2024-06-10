@@ -12,7 +12,7 @@ export default function CustomerLayout({
                 <AdminNavLink href="/products">Products</AdminNavLink>
                 <AdminNavLink href="/orders">My Orders</AdminNavLink>
             </AdminNav>
-            <div className="container my-6">{children}</div>
+            <div className="w-full mx-auto px-8 my-6">{children}</div>
         </>
     );
 }

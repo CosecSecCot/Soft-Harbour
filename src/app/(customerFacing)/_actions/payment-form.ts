@@ -10,6 +10,7 @@ export const formSchema = z.object({
 });
 
 export async function onPaymentSubmit(
+    productId: string,
     amount: number,
     values: z.infer<typeof formSchema>
 ) {
@@ -19,7 +20,7 @@ export async function onPaymentSubmit(
 
     if (values.payemntOption == "stripe") {
     } else {
-        await payWithRazorPay(values.name, values.email, amount);
+        await payWithRazorPay(productId, values.name, values.email, amount);
     }
 }
 
@@ -40,6 +41,7 @@ function loadScript(src: string): Promise<boolean> {
 }
 
 export async function payWithRazorPay(
+    productId: string,
     name: string,
     email: string,
     amount: number
@@ -47,21 +49,22 @@ export async function payWithRazorPay(
     const order = await initiatePayment(amount);
     console.log("frontend: ", order.id);
     const opts = {
-        key_id: process.env.RAZORPAY_KEY_ID as string,
+        key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID as string,
         amount: amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
         currency: "INR",
         name: "Soft Harbour",
         description: "Test Transaction",
         image: "",
         order_id: order.id,
-        callback_url: "http://localhost:3000/api/razorpay",
+        callback_url: `${process.env.NEXT_PUBLIC_URL}/api/razorpay?productId=${productId}&email=${email}&amount=${amount}`,
         prefill: {
             //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
             name: name, //your customer's name
             email: email,
         },
         notes: {
-            address: "Razorpay Corporate Office",
+            // produtctId: productId,
+            addinfo: "deez nuts",
         },
         theme: {
             color: "#000000",
