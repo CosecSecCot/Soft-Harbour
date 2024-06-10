@@ -28,6 +28,7 @@ import {
     ActiveToggleDropdownItem,
     DeleteDropdownItem,
 } from "../_components/product-actions";
+import { Badge } from "@/components/ui/badge";
 
 export default function AdminProductsPage() {
     return (
@@ -61,8 +62,9 @@ async function ProductsTable() {
         <Table>
             <TableHeader>
                 <TableRow>
-                    <TableHead className="w-0">
-                        <span className="sr-only">Available For Purchase</span>
+                    <TableHead className="w-[100px]">
+                        {/* <span className="sr-only">Available For Purchase</span> */}
+                        Status
                     </TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Price</TableHead>
@@ -78,13 +80,17 @@ async function ProductsTable() {
                         <TableCell>
                             {product.isAvailableForPurchase ? (
                                 <>
-                                    <span className="sr-only">Available</span>
-                                    <CheckCircle2 />
+                                    {/* <span className="sr-only">Available</span> */}
+                                    {/* <CheckCircle2 /> */}
+                                    <Badge variant="default">Active</Badge>
                                 </>
                             ) : (
                                 <>
-                                    <span className="sr-only">Unavailable</span>
-                                    <XCircle className="stroke-destructive" />
+                                    {/* <span className="sr-only">Unavailable</span> */}
+                                    {/* <XCircle className="stroke-destructive" /> */}
+                                    <Badge variant="destructive">
+                                        Inactive
+                                    </Badge>
                                 </>
                             )}
                         </TableCell>

@@ -2,13 +2,14 @@ import db from "@/app/db/db";
 import { Button } from "@/components/ui/button";
 import { notFound } from "next/navigation";
 import { validateDownloadVerificationId } from "../../_actions/downloadVerification";
+import { PaymentSuccess } from "../../_components/payment-status";
 
 export default async function RazorpayPurchaseSuccessPage({
-    searchParams: { productId, tok },
+    searchParams: { productId, orderId, tok },
 }: {
-    searchParams: { productId: string; tok: string };
+    searchParams: { productId: string; orderId: string; tok: string };
 }) {
-    if (!productId || !tok) {
+    if (!productId || !tok || !orderId) {
         return notFound();
     }
 
@@ -20,8 +21,15 @@ export default async function RazorpayPurchaseSuccessPage({
 
     const validDownloadLink = await validateDownloadVerificationId(tok);
 
+    const orders = await db.order.findUnique({
+        where: {
+            id: orderId,
+        },
+    });
+
     if (
         !product ||
+        !orders ||
         !validDownloadLink ||
         product.id != validDownloadLink.productId
     ) {
@@ -29,11 +37,8 @@ export default async function RazorpayPurchaseSuccessPage({
     }
 
     return (
-        <div>
-            <div>{`Product: ${product.name}`}</div>
-            <Button asChild>
-                <a href={`/products/download/${tok}`}>Download</a>
-            </Button>
+        <div className="w-full h-[80vh] flex flex-col items-center justify-center">
+            <PaymentSuccess tok={tok} orderId={orderId} productId={productId} />
         </div>
     );
 }

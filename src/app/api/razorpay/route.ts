@@ -91,6 +91,10 @@ export async function POST(req: NextRequest) {
                 email,
                 orders: {
                     create: {
+                        // this can be undefined also, need to handle before this
+                        // method needs to be implemented
+                        // id: body.razorpay_order_id.toString(),
+
                         productId,
                         pricePaidInPaise: amount,
                     },
@@ -104,7 +108,7 @@ export async function POST(req: NextRequest) {
         // with order, send email to user
 
         const url = new URL(
-            `${process.env.NEXT_PUBLIC_URL}/razorpay/purchase-success?productId=${productId}&tok=${await createDownloadVerification(productId)}`,
+            `${process.env.NEXT_PUBLIC_URL}/razorpay/purchase-success?productId=${productId}&orderId=${order.id}&tok=${await createDownloadVerification(productId)}`,
             req.url
         );
 

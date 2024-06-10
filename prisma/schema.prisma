@@ -32,6 +32,7 @@ model User {
     orders    Order[]
 }
 
+// need to add method "razorpay" | "stripe"
 model Order {
     id               String   @id @default(uuid())
     pricePaidInPaise Int
