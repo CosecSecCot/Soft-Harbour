@@ -11,8 +11,15 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { formatCurrency } from "@/lib/formatters";
-import { Download, RotateCcw } from "lucide-react";
+import {
+    CircleCheck,
+    CircleCheckBig,
+    CircleX,
+    Download,
+    RotateCcw,
+} from "lucide-react";
 import Link from "next/link";
+import Countdown from "./countdown";
 
 // razorpay/purchase-success?
 // productId=0cbdf5ac-6657-41fc-b466-b16cc5a30044&
@@ -43,6 +50,7 @@ export async function PaymentSuccess({
     if (!product || !downloadVerification) {
         return (
             <div className="p-4 flex flex-col gap-4 justify-center items-center">
+                <CircleX className="text-destructive size-24" />
                 <h1 className="text-destructive text-center text-4xl font-bold">
                     Something Went Wrong
                 </h1>
@@ -65,6 +73,7 @@ export async function PaymentSuccess({
         <>
             <div className="flex flex-col gap-8 justify-center items-center">
                 <div className="flex flex-col gap-4 justify-center items-center">
+                    <CircleCheckBig className="size-24" />
                     <h1 className="text-6xl text-center font-bold">
                         Payment Successful
                     </h1>
@@ -116,24 +125,20 @@ export async function PaymentSuccess({
                         </div>
                     </Button>
                 </div>
-                <p className="text-destructive">
-                    This link will expire at{" "}
-                    {msToDHMS(
-                        downloadVerification.expiresAt.getTime() - Date.now()
+                <div className="text-destructive">
+                    {downloadVerification.expiresAt.getTime() >
+                    new Date().getTime() ? (
+                        <div className="flex flex-col items-center justify-center">
+                            <p>This link will expire in</p>
+                            <Countdown
+                                targetDate={downloadVerification.expiresAt}
+                            />
+                        </div>
+                    ) : (
+                        <p>This link has been expired</p>
                     )}
-                </p>
+                </div>
             </div>
         </>
     );
-}
-
-function msToDHMS(ms: number): string {
-    // const days = Math.floor(ms / (24 * 60 * 60 * 1000));
-    const daysms = ms % (24 * 60 * 60 * 1000);
-    const hours = Math.floor(daysms / (60 * 60 * 1000));
-    const hoursms = ms % (60 * 60 * 1000);
-    const minutes = Math.floor(hoursms / (60 * 1000));
-    const minutesms = ms % (60 * 1000);
-    const sec = Math.floor(minutesms / 1000);
-    return hours + " hours " + minutes + " minutes " + sec + " seconds";
 }
