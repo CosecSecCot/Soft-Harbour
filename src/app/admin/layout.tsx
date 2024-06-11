@@ -8,7 +8,6 @@ export default function AdminLayout({
     return (
         <>
             <AdminNav>
-                <AdminNavLink href="/">Home</AdminNavLink>
                 <AdminNavLink href="/admin">Dashboard</AdminNavLink>
                 <AdminNavLink href="/admin/products">Products</AdminNavLink>
                 <AdminNavLink href="/admin/users">Customers</AdminNavLink>

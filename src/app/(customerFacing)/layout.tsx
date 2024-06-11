@@ -8,7 +8,6 @@ export default function CustomerLayout({
     return (
         <>
             <AdminNav>
-                <AdminNavLink href="/">Home</AdminNavLink>
                 <AdminNavLink href="/products">Products</AdminNavLink>
                 <AdminNavLink href="/orders">My Orders</AdminNavLink>
             </AdminNav>
