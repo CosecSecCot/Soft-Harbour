@@ -60,21 +60,25 @@ export function AdminNav({ children }: { children: React.ReactNode }) {
                     </Button>
                 </SheetTrigger>
                 <SheetContent side="left">
-                    <nav className="grid gap-6 text-lg font-medium">
-                        <SheetClose asChild>
-                            <Link
-                                href="/"
-                                className="flex items-center gap-2 text-lg font-semibold"
-                            >
-                                <Home className="h-6 w-6" />
-                                <span className="sr-only">Home</span>
-                            </Link>
-                        </SheetClose>
-                        {React.Children.map(children, (child, index) => (
-                            <SheetClose asChild key={index}>
-                                {child}
+                    <nav className="flex flex-col gap-12 text-lg font-medium">
+                        <div>
+                            <SheetClose asChild>
+                                <Link
+                                    href="/"
+                                    className="flex items-center gap-2 text-lg font-semibold"
+                                >
+                                    <Home className="h-6 w-6" />
+                                    <span className="sr-only">Home</span>
+                                </Link>
                             </SheetClose>
-                        ))}
+                        </div>
+                        <div className="flex flex-col gap-2 text-lg font-medium">
+                            {React.Children.map(children, (child, index) => (
+                                <SheetClose asChild key={index}>
+                                    {child}
+                                </SheetClose>
+                            ))}
+                        </div>
                     </nav>
                 </SheetContent>
             </Sheet>
