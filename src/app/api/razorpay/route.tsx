@@ -4,6 +4,7 @@ import db from "@/app/db/db";
 import { NextRequest, NextResponse } from "next/server";
 import Razorpay from "razorpay";
 import { validatePaymentVerification } from "razorpay/dist/utils/razorpay-utils";
+import { Resend } from "resend";
 
 export async function POST(req: NextRequest) {
     const data = await req.formData();
@@ -106,6 +107,13 @@ export async function POST(req: NextRequest) {
         });
 
         // with order, send email to user
+        const resend = new Resend(process.env.RESEND_API_KEY ?? "");
+        await resend.emails.send({
+            from: `Support <${process.env.SENDER_EMAIL}>`,
+            to: email,
+            subject: "Order Confirmation",
+            react: <h1>Payment Successfull</h1>,
+        });
 
         const url = new URL(
             `${process.env.NEXT_PUBLIC_URL}/razorpay/purchase-success?productId=${productId}&orderId=${order.id}&tok=${await createDownloadVerification(productId)}`,
