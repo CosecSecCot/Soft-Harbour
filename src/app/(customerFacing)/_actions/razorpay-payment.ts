@@ -3,8 +3,7 @@
 import Razorpay from "razorpay";
 
 export async function initiatePayment(amount: number) {
-    const KEY_ID =
-        process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ?? "razorpay key id not found";
+    const KEY_ID = process.env.RAZORPAY_KEY_ID ?? "razorpay key id not found";
     const KEY_SECRET =
         process.env.RAZORPAY_KEY_SECRET ?? "razorpay key secret not found";
 
