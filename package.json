@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "email": "cp .env ./node_modules/react-email && email dev --dir src/email --port 42069"
+    "email": "cp .env ./node_modules/react-email && email dev --dir src/email --port 42069",
+    "postinstall": "prisma generate",
   },
   "dependencies": {
     "@hookform/resolvers": "^3.4.2",
