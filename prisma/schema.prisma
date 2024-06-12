@@ -6,34 +6,39 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+    provider  = "postgresql"
+    url       = env("POSTGRES_PRISMA_URL")
+    directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model Product {
-    id                     String                 @id @default(uuid())
+model SoftHubProduct {
+    id                     String                        @id @default(uuid())
     name                   String
     priceInPaise           Int
     filePath               String
     imagePath              String
     description            String
-    isAvailableForPurchase Boolean                @default(true)
-    createdAt              DateTime               @default(now())
-    updatedAt              DateTime               @updatedAt
-    orders                 Order[]
-    downloadVerifications  DownloadVerification[]
+    isAvailableForPurchase Boolean                       @default(true)
+    createdAt              DateTime                      @default(now())
+    updatedAt              DateTime                      @updatedAt
+    orders                 SoftHubOrder[]
+    downloadVerifications  SoftHubDownloadVerification[]
+
+    @@map("Product")
 }
 
-model User {
-    id        String   @id @default(uuid())
-    email     String   @unique
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    orders    Order[]
+model SoftHubUser {
+    id        String         @id @default(uuid())
+    email     String         @unique
+    createdAt DateTime       @default(now())
+    updatedAt DateTime       @updatedAt
+    orders    SoftHubOrder[]
+
+    @@map("User")
 }
 
 // need to add method "razorpay" | "stripe"
-model Order {
+model SoftHubOrder {
     id               String   @id @default(uuid())
     pricePaidInPaise Int
     createdAt        DateTime @default(now())
@@ -41,14 +46,18 @@ model Order {
 
     userId    String
     productId String
-    user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    product   Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+    user      SoftHubUser    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    product   SoftHubProduct @relation(fields: [productId], references: [id], onDelete: Restrict)
+
+    @@map("Order")
 }
 
-model DownloadVerification {
-    id        String   @id @default(uuid())
+model SoftHubDownloadVerification {
+    id        String         @id @default(uuid())
     expiresAt DateTime
-    createdAt DateTime @default(now())
+    createdAt DateTime       @default(now())
     productId String
-    product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+    product   SoftHubProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+    @@map("DownloadVerification")
 }
