@@ -11,34 +11,34 @@ datasource db {
     directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model SoftHubProduct {
-    id                     String                        @id @default(uuid())
+model Product {
+    id                     String                 @id @default(uuid())
     name                   String
     priceInPaise           Int
     filePath               String
     imagePath              String
     description            String
-    isAvailableForPurchase Boolean                       @default(true)
-    createdAt              DateTime                      @default(now())
-    updatedAt              DateTime                      @updatedAt
-    orders                 SoftHubOrder[]
-    downloadVerifications  SoftHubDownloadVerification[]
+    isAvailableForPurchase Boolean                @default(true)
+    createdAt              DateTime               @default(now())
+    updatedAt              DateTime               @updatedAt
+    orders                 Order[]
+    downloadVerifications  DownloadVerification[]
 
-    @@map("Product")
+    @@map("softhub_product")
 }
 
-model SoftHubUser {
-    id        String         @id @default(uuid())
-    email     String         @unique
-    createdAt DateTime       @default(now())
-    updatedAt DateTime       @updatedAt
-    orders    SoftHubOrder[]
+model User {
+    id        String   @id @default(uuid())
+    email     String   @unique
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    orders    Order[]
 
-    @@map("User")
+    @@map("softhub_user")
 }
 
 // need to add method "razorpay" | "stripe"
-model SoftHubOrder {
+model Order {
     id               String   @id @default(uuid())
     pricePaidInPaise Int
     createdAt        DateTime @default(now())
@@ -46,18 +46,18 @@ model SoftHubOrder {
 
     userId    String
     productId String
-    user      SoftHubUser    @relation(fields: [userId], references: [id], onDelete: Cascade)
-    product   SoftHubProduct @relation(fields: [productId], references: [id], onDelete: Restrict)
+    user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    product   Product @relation(fields: [productId], references: [id], onDelete: Restrict)
 
-    @@map("Order")
+    @@map("softhub_order")
 }
 
-model SoftHubDownloadVerification {
-    id        String         @id @default(uuid())
+model DownloadVerification {
+    id        String   @id @default(uuid())
     expiresAt DateTime
-    createdAt DateTime       @default(now())
+    createdAt DateTime @default(now())
     productId String
-    product   SoftHubProduct @relation(fields: [productId], references: [id], onDelete: Cascade)
+    product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-    @@map("DownloadVerification")
+    @@map("softhub_downloadVerification")
 }
