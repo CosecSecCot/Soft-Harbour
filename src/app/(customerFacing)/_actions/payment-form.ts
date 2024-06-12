@@ -14,8 +14,8 @@ export async function onPaymentSubmit(
     amount: number,
     values: z.infer<typeof formSchema>
 ) {
-    console.log(values);
-    console.log(amount);
+    // console.log(values);
+    // console.log(amount);
     // USER DB HANDLE
 
     if (values.payemntOption == "stripe") {
@@ -47,7 +47,7 @@ export async function payWithRazorPay(
     amount: number
 ) {
     const order = await initiatePayment(amount);
-    console.log("frontend: ", order.id);
+    // console.log("frontend: ", order.id);
     const opts = {
         key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID as string,
         amount: amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise

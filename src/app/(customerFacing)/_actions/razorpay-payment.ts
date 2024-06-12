@@ -8,7 +8,7 @@ export async function initiatePayment(amount: number) {
     const KEY_SECRET =
         process.env.RAZORPAY_KEY_SECRET ?? "razorpay key secret not found";
 
-    console.log(KEY_ID, KEY_SECRET);
+    // console.log(KEY_ID, KEY_SECRET);
 
     const instance = new Razorpay({
         key_id: KEY_ID,
@@ -20,7 +20,7 @@ export async function initiatePayment(amount: number) {
         currency: "INR",
     });
 
-    console.log("initiated: ", order.id);
+    // console.log("initiated: ", order.id);
 
     return order;
 }
