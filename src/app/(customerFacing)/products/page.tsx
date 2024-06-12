@@ -29,7 +29,10 @@ export default async function CustomerProductsPage() {
         <div className="lg:max-w-[70vw] mx-auto flex flex-col md:gap-4 gap-8">
             {products.map((product) => {
                 return (
-                    <Card className="transition ease-in-out hover:bg-primary-foreground duration-300">
+                    <Card
+                        className="transition ease-in-out hover:bg-primary-foreground duration-300"
+                        key={product.id}
+                    >
                         <Link
                             href={`/products/${product.id}`}
                             className="flex md:flex-row flex-col items-center gap-4"

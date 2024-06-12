@@ -1,6 +1,7 @@
 "use server";
-import { createDownloadVerification } from "@/app/(customerFacing)/_actions/downloadVerification";
+import { createDownloadVerificationId } from "@/app/(customerFacing)/_actions/downloadVerification";
 import db from "@/app/db/db";
+import PurchaseReceiptEmail from "@/email/purchase-receipt";
 import { NextRequest, NextResponse } from "next/server";
 import Razorpay from "razorpay";
 import { validatePaymentVerification } from "razorpay/dist/utils/razorpay-utils";
@@ -105,18 +106,57 @@ export async function POST(req: NextRequest) {
                 orders: { orderBy: { createdAt: "desc" }, take: 1 },
             },
         });
+        const product = await db.product.findUnique({
+            where: {
+                id: productId,
+            },
+        });
+        const downloadVerificationId =
+            await createDownloadVerificationId(productId);
 
         // with order, send email to user
         const resend = new Resend(process.env.RESEND_API_KEY ?? "");
-        await resend.emails.send({
-            from: `Support <${process.env.SENDER_EMAIL}>`,
-            to: email,
-            subject: "Order Confirmation",
-            react: <h1>Payment Successfull</h1>,
-        });
+        if (product) {
+            await resend.emails.send({
+                from: `Support <${process.env.SENDER_EMAIL}>`,
+                to: email,
+                subject: "Order Confirmation",
+                react: (
+                    <PurchaseReceiptEmail
+                        order={order}
+                        product={product}
+                        downloadVerificationId={downloadVerificationId}
+                    />
+                ),
+            });
+        } else {
+            await resend.emails.send({
+                from: `Support <${process.env.SENDER_EMAIL}>`,
+                to: email,
+                subject: "Order Confirmation",
+                react: (
+                    <>
+                        <h1>Payement Successful</h1>
+                        <p>
+                            Get the download link from{" "}
+                            <strong>
+                                <a
+                                    href={`${process.env.NEXT_PUBLIC_URL}/orders`}
+                                >
+                                    My Orders
+                                </a>
+                            </strong>{" "}
+                            page
+                        </p>
+                    </>
+                ),
+            });
+        }
+
+        // http://localhost:3000/api/razorpay?productId=0cbdf5ac-6657-41fc-b466-b16cc5a30044&email=cosecseccot581@gmail.com&amount=42099
 
         const url = new URL(
-            `${process.env.NEXT_PUBLIC_URL}/razorpay/purchase-success?productId=${productId}&orderId=${order.id}&tok=${await createDownloadVerification(productId)}`,
+            `${process.env.NEXT_PUBLIC_URL}/razorpay/purchase-success?productId=${productId}&orderId=${order.id}&tok=${downloadVerificationId}`,
             req.url
         );
 

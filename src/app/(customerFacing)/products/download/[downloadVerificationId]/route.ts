@@ -33,7 +33,10 @@ export async function GET(
 
     const { size } = await fs.stat(data.product.filePath);
     const file = await fs.readFile(data.product.filePath);
-    const fileExtension = data.product.filePath.split(".").pop();
+    let fileExtension = data.product.filePath.split(".").pop();
+    if (fileExtension == data.product.filePath) {
+        fileExtension = "";
+    }
 
     return new NextResponse(file, {
         headers: {

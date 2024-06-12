@@ -5,7 +5,13 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { CircleUser, Home, Menu, Package2, Search } from "lucide-react";
-import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
+import {
+    Sheet,
+    SheetClose,
+    SheetContent,
+    SheetHeader,
+    SheetTrigger,
+} from "./ui/sheet";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import {
@@ -61,7 +67,7 @@ export function AdminNav({ children }: { children: React.ReactNode }) {
                 </SheetTrigger>
                 <SheetContent side="left">
                     <nav className="flex flex-col gap-12 text-lg font-medium">
-                        <div>
+                        <SheetHeader>
                             <SheetClose asChild>
                                 <Link
                                     href="/"
@@ -71,7 +77,7 @@ export function AdminNav({ children }: { children: React.ReactNode }) {
                                     <span className="sr-only">Home</span>
                                 </Link>
                             </SheetClose>
-                        </div>
+                        </SheetHeader>
                         <div className="flex flex-col gap-2 text-lg font-medium">
                             {React.Children.map(children, (child, index) => (
                                 <SheetClose asChild key={index}>

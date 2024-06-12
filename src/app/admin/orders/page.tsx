@@ -7,7 +7,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import db from "@/app/db/db";
-import { formatCurrency } from "@/lib/formatters";
+import { formatCurrency, formatDate } from "@/lib/formatters";
 import PageHeader from "@/components/page-header";
 import {
     DropdownMenu,
@@ -24,6 +24,7 @@ function getOrders() {
         select: {
             id: true,
             pricePaidInPaise: true,
+            createdAt: true,
             product: { select: { name: true } },
             user: { select: { email: true } },
         },
@@ -51,6 +52,7 @@ async function OrdersTable() {
                 <TableRow>
                     <TableHead>Product</TableHead>
                     <TableHead>Customer</TableHead>
+                    <TableHead className="w-[15%]">Purchased On</TableHead>
                     <TableHead>Price Paid</TableHead>
                     <TableHead className="w-0">
                         <span className="sr-only">Actions</span>
@@ -62,6 +64,7 @@ async function OrdersTable() {
                     <TableRow key={order.id}>
                         <TableCell>{order.product.name}</TableCell>
                         <TableCell>{order.user.email}</TableCell>
+                        <TableCell>{formatDate(order.createdAt)}</TableCell>
                         <TableCell>
                             {formatCurrency(order.pricePaidInPaise / 100)}
                         </TableCell>

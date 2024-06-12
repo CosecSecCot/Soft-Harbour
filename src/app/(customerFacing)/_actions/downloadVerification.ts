@@ -1,6 +1,6 @@
 import db from "@/app/db/db";
 
-export async function createDownloadVerification(id: string) {
+export async function createDownloadVerificationId(id: string) {
     return (
         await db.downloadVerification.create({
             data: {

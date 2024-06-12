@@ -42,8 +42,10 @@ export default async function ProductPurchasePage({
                     </div>
                     <div className="flex flex-col justify-center lg:w-[50%] w-[50%] gap-8">
                         <div>
-                            <PageHeader>{product.name}</PageHeader>
-                            <p className="text-muted-foreground line-clamp-2 break-words">
+                            <h1 className="sm:text-5xl text-4xl font-semibold mb-4 line-clamp-3 break-words">
+                                {product.name}
+                            </h1>
+                            <p className="text-muted-foreground sm:line-clamp-4 line-clamp-2 break-words">
                                 {product.description}
                             </p>
                         </div>
