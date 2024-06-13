@@ -4,6 +4,7 @@ import { GeistSans as FontSans } from "geist/font/sans";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
+import { EdgeStoreProvider } from "@/lib/edgestore";
 
 // const fontSans = FontSans({
 //     subsets: ["latin"],
@@ -29,14 +30,16 @@ export default function RootLayout({
                     FontSans.variable
                 )}
             >
-                <ThemeProvider
-                    attribute="class"
-                    defaultTheme="system"
-                    enableSystem
-                    disableTransitionOnChange
-                >
-                    {children}
-                </ThemeProvider>
+                <EdgeStoreProvider>
+                    <ThemeProvider
+                        attribute="class"
+                        defaultTheme="system"
+                        enableSystem
+                        disableTransitionOnChange
+                    >
+                        {children}
+                    </ThemeProvider>
+                </EdgeStoreProvider>
             </body>
         </html>
     );

@@ -49,7 +49,7 @@ export default function OrderInformation({
                 <Img
                     width="65%"
                     alt={product.name}
-                    src={`${process.env.NEXT_PUBLIC_URL}/${product.imagePath}`}
+                    src={`${product.imagePath}`}
                 />
                 <Row className="mt-8">
                     <Column className="align-middle">

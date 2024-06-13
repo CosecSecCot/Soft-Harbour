@@ -45,7 +45,7 @@ export function ProductDisplayCard({ products }: ProductDisplayCardProps) {
                                                     " cover_image"
                                                 }
                                                 className="rounded-md object-cover"
-                                                src={`/${product.imagePath}`}
+                                                src={`${product.imagePath}`}
                                                 fill
                                             />
                                         </div>

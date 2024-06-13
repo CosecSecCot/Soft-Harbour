@@ -32,7 +32,7 @@ export default async function ProductDetailsPage({
                     <Image
                         alt={product.name + " cover_image"}
                         className="rounded-md object-cover"
-                        src={`/${product.imagePath}`}
+                        src={`${product.imagePath}`}
                         fill
                     />
                 </div>

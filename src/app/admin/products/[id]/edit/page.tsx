@@ -1,6 +1,7 @@
 import PageHeader from "@/components/page-header";
-import { ProductForm } from "@/app/admin/_components/product-form";
+import { ProductEditForm } from "@/app/admin/_components/product-edit-form";
 import db from "@/app/db/db";
+import { notFound } from "next/navigation";
 
 export default async function EditProductPage({
     params: { id },
@@ -13,10 +14,14 @@ export default async function EditProductPage({
         },
     });
 
+    if (!product) {
+        return notFound();
+    }
+
     return (
         <>
             <PageHeader>Edit Product</PageHeader>
-            <ProductForm product={product} />
+            <ProductEditForm product={product} />
         </>
     );
 }

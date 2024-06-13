@@ -28,10 +28,12 @@ import { useState } from "react";
 import { SingleImageDropzone } from "./single-image-dropzone";
 import { useEdgeStore } from "@/lib/edgestore";
 import { Progress } from "@/components/ui/progress";
-import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
 import { formatCurrency } from "@/lib/formatters";
-import { addProductToDb } from "../_actions/products";
+import { updateProductInDb } from "../_actions/products";
+import { Product } from "@prisma/client";
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 
 const fileSchema = z.instanceof(File, {
     message: "invalid File",
@@ -46,34 +48,70 @@ const formSchema = z.object({
     priceInPaise: z.coerce.number().int().min(0, {
         message: "Price must be greater than or equal to 0",
     }),
-    file: fileSchema.refine((file) => file.size > 0, "Required"),
+    file: fileSchema.refine((file) => file.size > 0, "Required").optional(),
 });
 
-export function ProductForm() {
-    // 1. Define your form.
+// async function urlToFile(url: string) {
+//     const response = await fetch(url);
+//     const blob = await response.blob();
+//
+//     console.log("URL: ", url);
+//
+//     const filetype = url.split(".").pop();
+//     const fileName = url.split("/").pop();
+//     const mimeType = "image/" + filetype;
+//     return new File([blob], fileName ?? crypto.randomUUID().toString(), {
+//         type: mimeType,
+//     });
+// }
+
+export function ProductEditForm({ product }: { product: Product }) {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            name: "",
-            description: "",
-            priceInPaise: undefined,
+            name: product.name,
+            description: product.description,
+            priceInPaise: product.priceInPaise,
             file: undefined,
         },
     });
 
     const { edgestore } = useEdgeStore();
-    const { toast } = useToast();
     const router = useRouter();
 
     const [imageFile, setImageFile] = useState<File | null>(null);
-    const [evaluatedPrice, setEvaluatedPrice] = useState("");
+    // const [evaluatedPrice, setEvaluatedPrice] = useState("");
+
+    // const [initialLoad, setInitialLoad] = useState(true);
+    // const { data: retrievedImageFile, error } = useSwr(
+    //     product.imagePath,
+    //     urlToFile,
+    //     { revalidateOnFocus: false, revalidateOnReconnect: false }
+    // );
+    // if (error) {
+    //     router.refresh();
+    // }
+    // useEffect(() => {
+    //     if (initialLoad && retrievedImageFile) {
+    //         setImageFile(retrievedImageFile);
+    //         setInitialLoad(false);
+    //     }
+    // }, [retrievedImageFile]);
+    //
 
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
     const [uploadStatusMessage, setUploadStatusMessage] = useState("");
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        // values.priceInPaise = Math.round(values.priceInPaise * 100);
+        // setUploading(
+        //     imageFile != null ||
+        //         values.file != null ||
+        //         values.name != product.name ||
+        //         values.description != product.description ||
+        //         values.priceInPaise != product.priceInPaise
+        // );
+        setUploading(true);
         let imageUploadResult: {
             url: string;
             thumbnailUrl: string | null;
@@ -84,10 +122,9 @@ export function ProductForm() {
                 type: string;
             };
             pathOrder: "type"[];
-        };
+        } | null = null;
 
         if (imageFile) {
-            setUploading(true);
             imageUploadResult = await edgestore.softhubProductImages.upload({
                 file: imageFile,
                 input: { type: "cover" },
@@ -100,36 +137,40 @@ export function ProductForm() {
                 },
             });
             console.log(imageUploadResult.url);
-        } else {
-            toast({
-                variant: "destructive",
-                title: "Cover image is reqired!",
-                description: "Please upload a cover image.",
-            });
-            return;
         }
-        const fileUploadResult = await edgestore.softhubProductFiles.upload({
-            file: values.file,
-            // options: {
-            //     temporary: true,
-            // },
-            onProgressChange: (progress) => {
-                setUploadProgress(progress);
-                setUploadStatusMessage("Uploading Product File ...");
-            },
-        });
-        console.log(fileUploadResult.url);
+        let fileUploadResult: {
+            url: string;
+            size: number;
+            uploadedAt: Date;
+            metadata: Record<string, never>;
+            path: Record<string, never>;
+            pathOrder: string[];
+        } | null = null;
+        if (values.file) {
+            fileUploadResult = await edgestore.softhubProductFiles.upload({
+                file: values.file,
+                // options: {
+                //     temporary: true,
+                // },
+                onProgressChange: (progress) => {
+                    setUploadProgress(progress);
+                    setUploadStatusMessage("Uploading Product File ...");
+                },
+            });
+            console.log(fileUploadResult.url);
+        }
         console.log(values);
 
         setUploadStatusMessage("Uploading data to database ...");
-        await addProductToDb(
+        await updateProductInDb(
+            product.id,
             {
                 name: values.name,
                 description: values.description,
                 priceInPaise: values.priceInPaise,
             },
-            fileUploadResult.url,
-            imageUploadResult.url
+            fileUploadResult?.url,
+            imageUploadResult?.url
         );
 
         router.push("/admin/products");
@@ -218,7 +259,7 @@ export function ProductForm() {
                             field: { value, onChange, ...fieldProps },
                         }) => (
                             <FormItem>
-                                <FormLabel>Product File</FormLabel>
+                                <FormLabel>Upload New Product File</FormLabel>
                                 <FormControl>
                                     <Input
                                         type="file"
@@ -228,34 +269,57 @@ export function ProductForm() {
                                                 onChange(event.target.files[0]);
                                             }
                                         }}
-                                        required
                                         {...fieldProps}
                                     />
                                 </FormControl>
+                                <FormDescription>
+                                    If you don't want to change the file, don't
+                                    change this field.
+                                </FormDescription>
                                 <FormMessage />
                             </FormItem>
                         )}
                     />
                     <div className="space-y-4">
                         <div className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                            Upload Image
+                            Upload New Image
                         </div>
-                        <SingleImageDropzone
-                            width={300}
-                            height={300}
-                            value={imageFile ? imageFile : undefined}
-                            disabled={uploading}
-                            onChange={(file) =>
-                                setImageFile(file ? file : null)
-                            }
-                        />
+                        <div className="flex sm:flex-row flex-col gap-4 items-center">
+                            <div className="relative text-center rounded-md overflow-hidden w-[300px] h-[300px]">
+                                <Image
+                                    src={product.imagePath}
+                                    alt={`${product.name}_cover`}
+                                    fill
+                                />
+                            </div>
+                            <ArrowRight className="w-10 h-10" />
+                            <SingleImageDropzone
+                                width={300}
+                                height={300}
+                                value={imageFile ? imageFile : undefined}
+                                disabled={uploading}
+                                onChange={(file) =>
+                                    setImageFile(file ? file : null)
+                                }
+                            />
+                        </div>
                     </div>
-                    <Button type="submit" disabled={uploading}>
+                    <Button
+                        type="submit"
+                        className="min-w-[10%]"
+                        disabled={uploading}
+                    >
                         {uploading ? "Saving..." : "Save"}
                     </Button>
                 </form>
-                {}
             </Form>
+            <Button
+                variant="outline"
+                className="mt-4 min-w-[10%]"
+                onClick={() => router.back()}
+            >
+                Reset
+            </Button>
         </>
     );
 }
