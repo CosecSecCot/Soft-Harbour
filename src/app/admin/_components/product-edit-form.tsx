@@ -273,8 +273,8 @@ export function ProductEditForm({ product }: { product: Product }) {
                                     />
                                 </FormControl>
                                 <FormDescription>
-                                    If you don't want to change the file, don't
-                                    change this field.
+                                    If you do nott want to change the file, do
+                                    not change this field.
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>
