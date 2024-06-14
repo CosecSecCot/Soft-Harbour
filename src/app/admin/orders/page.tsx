@@ -19,6 +19,8 @@ import { MoreHorizontal, MoreVertical } from "lucide-react";
 import { DeleteDropDownItem } from "./_components/OrderActions";
 import { Button } from "@/components/ui/button";
 
+export const dynamic = "force-dynamic";
+
 function getOrders() {
     return db.order.findMany({
         select: {

@@ -18,6 +18,8 @@ import { MoreHorizontal, MoreVertical } from "lucide-react";
 import { DeleteDropDownItem } from "./_components/user-actions";
 import { Button } from "@/components/ui/button";
 
+export const dynamic = "force-dynamic";
+
 function getUsers() {
     return db.user.findMany({
         select: {

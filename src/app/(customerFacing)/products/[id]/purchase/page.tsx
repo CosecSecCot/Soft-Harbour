@@ -6,6 +6,8 @@ import { formatCurrency } from "@/lib/formatters";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProductPurchasePage({
     params: { id },
 }: {

@@ -9,6 +9,8 @@ import { formatCurrency, formatNumber } from "@/lib/formatters";
 import db from "../db/db";
 import { LineChart, Package, UserRound } from "lucide-react";
 
+export const dynamic = "force-dynamic";
+
 async function getSalesData() {
     const data = await db.order.aggregate({
         _sum: { pricePaidInPaise: true },

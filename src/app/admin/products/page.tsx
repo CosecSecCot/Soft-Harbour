@@ -30,6 +30,8 @@ import {
 } from "../_components/product-actions";
 import { Badge } from "@/components/ui/badge";
 
+export const dynamic = "force-dynamic";
+
 export default function AdminProductsPage() {
     return (
         <>

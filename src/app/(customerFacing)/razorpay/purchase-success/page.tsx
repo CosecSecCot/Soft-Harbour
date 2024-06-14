@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { validateDownloadVerificationId } from "../../_actions/downloadVerification";
 import { PaymentSuccess } from "../../_components/payment-status";
 
+export const dynamic = "force-dynamic";
+
 export default async function RazorpayPurchaseSuccessPage({
     searchParams: { productId, orderId, tok },
 }: {

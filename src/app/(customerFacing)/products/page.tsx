@@ -14,6 +14,8 @@ import { ArrowRight, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function CustomerProductsPage() {
     // move to actions and implement sorting and filtering
     const products = await db.product.findMany({
