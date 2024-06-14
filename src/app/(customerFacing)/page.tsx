@@ -10,6 +10,8 @@ import {
     ProductDisplayCardSkeleton,
 } from "./_components/product-display-card";
 
+export const dynamic = "force-dynamic";
+
 async function getPopularProducts() {
     return await db.product.findMany({
         where: { isAvailableForPurchase: true },
