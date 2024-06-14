@@ -44,7 +44,7 @@ export default async function CustomerProductsPage() {
                                     <Image
                                         alt={product.name + " cover_image"}
                                         className="rounded-lg object-cover aspect-square"
-                                        src={`/${product.imagePath}`}
+                                        src={`${product.imagePath}`}
                                         fill
                                     />
                                 </div>
