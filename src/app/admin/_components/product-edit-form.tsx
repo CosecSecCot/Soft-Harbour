@@ -180,7 +180,7 @@ export function ProductEditForm({ product }: { product: Product }) {
     return (
         <>
             <AlertDialog open={uploading}>
-                <AlertDialogContent>
+                <AlertDialogContent className="w-11/12 sm:max-w-md">
                     <AlertDialogHeader>
                         <AlertDialogTitle>Uploading Content</AlertDialogTitle>
                         <AlertDialogDescription>

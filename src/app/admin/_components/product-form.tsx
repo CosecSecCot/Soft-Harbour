@@ -139,7 +139,7 @@ export function ProductForm() {
     return (
         <>
             <AlertDialog open={uploading}>
-                <AlertDialogContent>
+                <AlertDialogContent className="w-11/12 sm:max-w-md">
                     <AlertDialogHeader>
                         <AlertDialogTitle>Uploading Content</AlertDialogTitle>
                         <AlertDialogDescription>

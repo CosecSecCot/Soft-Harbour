@@ -41,6 +41,7 @@ export function AdminNav({ children }: { children: React.ReactNode }) {
                 <Button
                     className="flex items-center gap-2 text-lg font-semibold md:text-base"
                     variant="ghost"
+                    size="icon"
                     asChild
                 >
                     <Link href="/">
