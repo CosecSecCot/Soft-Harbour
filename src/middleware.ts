@@ -1,9 +1,7 @@
-import { hash } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
-import { string } from "zod";
 
 export async function middleware(req: NextRequest) {
-    if ((await isAuthenticted(req)) === false) {
+    if ((await isAuthenticated(req)) === false) {
         return new NextResponse("Unauthorized", {
             status: 401,
             headers: {
@@ -13,7 +11,7 @@ export async function middleware(req: NextRequest) {
     }
 }
 
-async function isAuthenticted(req: NextRequest) {
+async function isAuthenticated(req: NextRequest) {
     const authHeader =
         req.headers.get("authorization") || req.headers.get("Authorization");
 
